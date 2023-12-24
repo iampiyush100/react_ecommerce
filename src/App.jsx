@@ -1,6 +1,5 @@
 import "./App.css";
-import TodoForm from "./components/forms/TodoForm";
-import TodoList from "./components/TodoList";
+import LoginForm from "./components/forms/Login";
 
 function App() {
   return (
@@ -14,9 +13,8 @@ function App() {
           flexDirection: "column",
           background: "#FAF9F6"
         }}>
-    <h1>TODO LIST</h1>
-      <TodoForm/>
-      <TodoList/>
+    <h1>Login</h1>
+      <LoginForm/>
     </div>
     </>
   );
