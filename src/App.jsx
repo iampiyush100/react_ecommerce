@@ -1,23 +1,23 @@
 import "./App.css";
-import LoginForm from "./components/forms/Login";
+import TodoForm from "./components/forms/TodoForm";
+import TodoList from "./components/TodoList";
 
 function App() {
   return (
     <>
-      <div
-        style={{
-          width: "30%",
-          height: "50vh",
+    <div  style={{
+          width: "100%",
+          height: "100vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
           background: "#FAF9F6"
-        }}
-      >
-        <h1>Login</h1>
-        <LoginForm />
-      </div>
+        }}>
+    <h1>TODO LIST</h1>
+      <TodoForm/>
+      <TodoList/>
+    </div>
     </>
   );
 }
