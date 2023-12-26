@@ -1,22 +1,25 @@
 import "./App.css";
-import LoginForm from "./components/forms/Login";
+import LoginForm from "./components/mui/MuiLogin";
+import SignIn from "./components/mui/MuiLogin";
+import RegisterationForm from "./components/forms/Register";
+import ForgotPassword from "./components/forms/ForgotPassword";
+import Products from "./components/products/Products";
 
+
+
+import {Routes, Route, BrowserRouter} from "react-router-dom";
 function App() {
   return (
     <>
-    <div  style={{
-          width: "100%",
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "column",
-          background: "#FAF9F6"
-        }}>
-    <h1>Login</h1>
-      <LoginForm/>
-    </div>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" exact element={<SignIn />}></Route>
+        <Route path="/register" exact element={<RegisterationForm />}></Route>
+        <Route path="/reset-password" exact element={<ForgotPassword />}></Route>
+        <Route path="/products" exact element={<Products />}></Route>
+      </Routes>
+    </BrowserRouter>
+   </>
   );
 }
 
