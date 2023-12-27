@@ -15,7 +15,10 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { useNavigate } from "react-router";
 
 const pages = ["Products", "Pricing", "Blog"];
+// const loginSettings = ["login"];
+// const logoutSettings = ["Profile", "Account", "Dashboard", "login", "Logout"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
+
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();
@@ -46,9 +49,10 @@ function ResponsiveAppBar() {
   };
 
   const touchBtn = (setting) => {
-    if (setting && setting == "Logout") {
-      localStorage.removeItem(15);
-      navigate("/");
+    console.log('setting>>>>', setting);
+    if (setting && setting === "Logout") {
+      localStorage.clear();
+      navigate("/login");
     }
   };
 
@@ -168,12 +172,9 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={() => {handleCloseUserMenu; touchBtn(setting)}}>
                   <Typography
                     textAlign="center"
-                    onClick={() => {
-                      touchBtn(setting);
-                    }}
                   >
                     {setting}
                   </Typography>

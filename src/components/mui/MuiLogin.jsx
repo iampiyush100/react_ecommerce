@@ -48,7 +48,7 @@ export default function SignIn() {
       const apiCalling = async () => {
         let config = {
           method: "post",
-          url: `https://dummyjson.com/auth/login`,
+          url: `${import.meta.env.VITE_BASE_URL}/auth/login`,
           headers: {
             "Content-Type": "application/json",
           },
