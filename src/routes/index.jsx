@@ -4,7 +4,7 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import SignIn from "../components/mui/MuiLogin";
+import SignIn from "../components/forms/MuiLogin";
 import Home from "../pages/Home";
 import RegisterationForm from "../components/forms/Register";
 import ForgotPassword from "../components/forms/ForgotPassword";
