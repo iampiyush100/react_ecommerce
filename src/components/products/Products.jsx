@@ -34,42 +34,25 @@ import { Link } from "react-router-dom";
 // import ResponsiveAppBar from "../navbar/Navbar";
 
 export default function Products() {
-  const [products, setProducts] = useState([
-    {
-      id: 11,
-      title: "perfume Oil",
-      description: "Mega Discount, Impression of Acqua Di Gio by GiorgioArmani concentrated attar perfume Oil",
-      price: 13,
-      discountPercentage: 8.4,
-      rating: 4.26,
-      stock: 65,
-      brand: "Impression of Acqua Di Gio",
-      category: "fragrances",
-      thumbnail: "https://i.dummyjson.com/data/products/11/thumbnail.jpg",
-      images: [
-        "https://i.dummyjson.com/data/products/11/1.jpg",
-        "https://i.dummyjson.com/data/products/11/2.jpg",
-        "https://i.dummyjson.com/data/products/11/3.jpg",
-        "https://i.dummyjson.com/data/products/11/thumbnail.jpg",
-      ],
-    },
-  ]);
+  const [products, setProducts] = useState([]);
 
   const [error, setError] = useState({ isError: false, message: "" });
   const [isLoading, setIsLoading] = useState(false);
+  const [skip, setSkip] = useState(0);
 
   const apiCalling = async () => {
     let config = {
       method: "get",
-      url: " https://dummyjson.com/products?limit=90&skip=10",
+      url: `https://dummyjson.com/products?limit=9&skip=${skip}`,
       headers: {
         "Content-Type": "application/json",
       },
     };
     try {
+      setIsLoading(true);
       const response = await axios.request(config);
       console.log({ response });
-      setProducts(response?.data?.products);
+      setProducts((prev) => [...prev, ...response?.data?.products]);
       setIsLoading(false);
     } catch (error) {
       console.log("error>>>", error);
@@ -81,9 +64,20 @@ export default function Products() {
     }
   };
 
+  async function handleInfiniteScrolling() {
+    try {
+      if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+        setSkip((prev) => prev + 9);
+        console.log("skip>>>>", skip);
+      }
+    } catch (error) {}
+  }
+
   useEffect(() => {
+    window.addEventListener("scroll", handleInfiniteScrolling);
     apiCalling();
-  }, []);
+    return () => window.removeEventListener("scroll", handleInfiniteScrolling);
+  }, [skip]);
 
   return (
     <div
@@ -97,6 +91,7 @@ export default function Products() {
     >
       {products.map((product) => (
         <Card key={product.id} sx={{ width: 320, marginBottom: "20px" }}>
+          {console.log("pd", product.id)}
           <div>
             <Typography level="title-lg">{product.title.toUpperCase()}</Typography>
             <Typography level="body-sm">{product.description}</Typography>
@@ -134,6 +129,7 @@ export default function Products() {
           </CardContent>
         </Card>
       ))}
+      {isLoading && <p style={{ color: "blue" }}>Loading.....</p>}
     </div>
   );
 }
