@@ -16,14 +16,13 @@ import { useNavigate } from "react-router";
 import { ImCart } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { saveUserOnLogin, removeUserOnLogout } from "../../features/Auth/authSlice";
+import { removeUserOnLogout } from "../../features/Auth/authSlice";
 
 const pages = ["Products", "Pricing", "Blog"];
-// const loginSettings = ["login"];
-// const logoutSettings = ["Profile", "Account", "Dashboard", "login", "Logout"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-function ResponsiveAppBar({ signedIn }) {
+function Navbar({ signedIn }) {
+  console.log("signedIn>>>", signedIn);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cartLength } = useSelector((state) => state.cart);
@@ -212,4 +211,4 @@ function ResponsiveAppBar({ signedIn }) {
     </AppBar>
   );
 }
-export default ResponsiveAppBar;
+export default Navbar;

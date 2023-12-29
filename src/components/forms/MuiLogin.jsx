@@ -42,7 +42,6 @@ export default function SignIn() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("user>>>>", user);
     if (user.email !== "" && user.password !== "") {
       setError({ isError: false, message: "" });
       setIsLoading(true);
@@ -62,11 +61,9 @@ export default function SignIn() {
           const response = await axios.request(config);
           localStorage.setItem("token", JSON.stringify(response?.data));
           dispatch(saveUserOnLogin(response?.data));
-          console.log("response.>>>>", response?.data);
           setIsLoading(false);
           navigate("/");
         } catch (error) {
-          console.log("error>>>>", error);
           setIsLoading(false);
           setError({
             isError: true,

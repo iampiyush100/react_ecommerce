@@ -1,8 +1,22 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import Navbar from "../components/navbar/Navbar";
 
-const ProtectedRoute = ({ signedIn }) => {
-  console.log("signedInsignedInsignedInsignedIn", signedIn);
-  return signedIn ? <Outlet /> : <Navigate to="/login" />;
+const ProtectedRoute = () => {
+  console.log("isndie ProtectedRoute");
+  let signedIn = false;
+  const isUserLoggedIn = JSON.parse(localStorage.getItem("token"));
+  if (isUserLoggedIn) {
+    signedIn = true;
+  }
+  console.log("signedIn>>>", signedIn);
+  return !signedIn ? (
+    <Navigate to="/login" />
+  ) : (
+    <>
+      <Navbar signedIn={signedIn} />
+      <Outlet />;
+    </>
+  );
 };
 export default ProtectedRoute;

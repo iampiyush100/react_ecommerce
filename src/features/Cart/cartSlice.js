@@ -64,7 +64,7 @@ export const cartSlice = createSlice({
                 state.totalAmount += item.price
             }
         },
-        descreaseProductsQuantity: (state, action) => {
+        decreaseProductsQuantity: (state, action) => {
             const { id, price } = action.payload;
             const itemToUpdate = state?.cartItems?.find((item) => item.id === id);
             if (itemToUpdate && itemToUpdate?.quantity >= 2) {
@@ -92,7 +92,7 @@ export const {
     updateProductsInCart,
     deleteProductsInCart,
     increaseProductsQuantity,
-    descreaseProductsQuantity,
+    decreaseProductsQuantity,
     calculateInitialState,
     clearCart
 } = cartSlice.actions

@@ -8,13 +8,10 @@ import Typography from "@mui/joy/Typography";
 import { useEffect, useState } from "react";
 import { CiHeart } from "react-icons/ci";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addProductsInCart } from "../../features/Cart/cartSlice";
-// import ResponsiveAppBar from "../navbar/Navbar";
 
 export default function Products() {
-  console.log("In product");
   const dispatch = useDispatch();
 
   const [products, setProducts] = useState([]);
@@ -37,11 +34,9 @@ export default function Products() {
     };
     try {
       const response = await axios.request(config);
-      console.log({ response });
       setProducts(response?.data?.products);
       setIsLoading(false);
     } catch (error) {
-      console.log("error>>>", error);
       setIsLoading(false);
       setError({
         isError: true,

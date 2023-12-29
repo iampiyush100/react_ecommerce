@@ -6,14 +6,14 @@ import axios from "axios";
 
 function LoginForm() {
   const [user, setUser] = useState({ email: "", password: "" });
-  const [error, setError] = useState({isError: false, message: ''});
+  const [error, setError] = useState({ isError: false, message: "" });
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (user.email !== "" && user.password !== "") {
-      setError({isError: false, message: ''});
+      setError({ isError: false, message: "" });
       setIsLoading(true);
       const apiCalling = async () => {
         let config = {
@@ -34,13 +34,12 @@ function LoginForm() {
         } catch (error) {
           setIsLoading(false);
 
-          setError({isError: true, message: error?.response?.data?.message || "something went wrong"});
+          setError({ isError: true, message: error?.response?.data?.message || "something went wrong" });
         }
       };
       apiCalling();
-      console.log(user);
     } else {
-      setError({isError: true, message: 'Please fill the form before submit'});
+      setError({ isError: true, message: "Please fill the form before submit" });
     }
   };
 
@@ -75,13 +74,7 @@ function LoginForm() {
       >
         <h3>LOGIN FORM</h3>
         <form onSubmit={handleSubmit}>
-          <Input
-            type="text"
-            name="email"
-            placeholder="Enter Email"
-            value={user.email}
-            onChange={handleChange}
-          />
+          <Input type="text" name="email" placeholder="Enter Email" value={user.email} onChange={handleChange} />
           <br />
           <br />
           <Input
@@ -93,18 +86,11 @@ function LoginForm() {
           />
           <br />
           <br />
-          <Button
-            style={{ background: "#FF69B4", color: "white" }}
-            type="submit"
-          >
+          <Button style={{ background: "#FF69B4", color: "white" }} type="submit">
             Login
           </Button>
-          {error.isError && (
-            <p style={{color: "red"}}>{error.message}</p>
-          )}
-             {isLoading && (
-            <p style={{color: "blue"}}>Loading.....</p>
-          )}
+          {error.isError && <p style={{ color: "red" }}>{error.message}</p>}
+          {isLoading && <p style={{ color: "blue" }}>Loading.....</p>}
         </form>
       </Card>
     </div>
