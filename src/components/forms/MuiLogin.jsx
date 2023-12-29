@@ -138,12 +138,12 @@ export default function SignIn() {
             {isLoading && <p style={{ color: "blue" }}>Loading.....</p>}
             <Grid container>
               <Grid item xs>
-                <RouterLink to="/reset-password" variant="body2">
+                <RouterLink to="/reset-password" variant="body2" style={{ textDecoration: "none", color: "Blue" }}>
                   Forgot password?
                 </RouterLink>
               </Grid>
               <Grid item>
-                <RouterLink to="/register" variant="body2">
+                <RouterLink to="/register" variant="body2" style={{ textDecoration: "none", color: "Blue" }}>
                   {"Don't have an account? Sign Up"}
                 </RouterLink>
               </Grid>

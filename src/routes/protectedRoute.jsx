@@ -3,7 +3,6 @@ import { Navigate, Outlet } from "react-router-dom";
 import Navbar from "../components/navbar/Navbar";
 
 const ProtectedRoute = () => {
-  console.log("isndie ProtectedRoute");
   let signedIn = false;
   const isUserLoggedIn = JSON.parse(localStorage.getItem("token"));
   if (isUserLoggedIn) {

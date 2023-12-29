@@ -10,6 +10,7 @@ import { CiHeart } from "react-icons/ci";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addProductsInCart } from "../../features/Cart/cartSlice";
+import Loader from "../loader/Loader";
 
 export default function Products() {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ export default function Products() {
 
   const [error, setError] = useState({ isError: false, message: "" });
   const [isLoading, setIsLoading] = useState(false);
+  const [skip, setSkip] = useState(0);
 
   function addToCart(item = {}) {
     dispatch(addProductsInCart(item));
@@ -27,14 +29,15 @@ export default function Products() {
     setIsLoading(true);
     let config = {
       method: "get",
-      url: " https://dummyjson.com/products?limit=9&skip=10",
+      url: `https://dummyjson.com/products?limit=9&skip=${skip}`,
       headers: {
         "Content-Type": "application/json",
       },
     };
     try {
+      setIsLoading(true);
       const response = await axios.request(config);
-      setProducts(response?.data?.products);
+      setProducts((prev) => [...prev, ...response?.data?.products]);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -46,8 +49,19 @@ export default function Products() {
   };
 
   useEffect(() => {
+    window.addEventListener("scroll", handleInfiniteScrolling);
     apiCalling();
-  }, []);
+    return () => window.removeEventListener("scroll", handleInfiniteScrolling);
+  }, [skip]);
+
+  async function handleInfiniteScrolling() {
+    try {
+      if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+        setSkip((prev) => prev + 9);
+        console.log("skip>>>>", skip);
+      }
+    } catch (error) {}
+  }
 
   return (
     <>
@@ -58,6 +72,7 @@ export default function Products() {
           flexDirection: "row",
           flexWrap: "wrap",
           justifyContent: "space-around",
+          backgroundColor: "#1776D2",
         }}
       >
         {products.map((product) => (
@@ -108,8 +123,16 @@ export default function Products() {
           </Card>
         ))}
       </div>
-      {error && <p className="bg-red">{error?.message}</p>}
-      {isLoading && <p className="bg-red">lodding....</p>}
+      {error && (
+        <center>
+          <p className="bg-red">{error?.message}</p>
+        </center>
+      )}
+      {isLoading && (
+        <center>
+          <Loader />
+        </center>
+      )}
     </>
   );
 }
