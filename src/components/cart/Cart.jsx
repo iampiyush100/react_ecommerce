@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { CiCirclePlus, CiCircleMinus } from "react-icons/ci";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import Button from '@mui/joy/Button';
-import ResponsiveAppBar from "../../components/navbar/Navbar";
-import { Link } from 'react-router-dom';
+import Button from "@mui/joy/Button";
+// import ResponsiveAppBar from "../../components/navbar/Navbar";
+import { Link } from "react-router-dom";
 
 import {
   increaseProductsQuantity,
   descreaseProductsQuantity,
-  clearCart
-//   calculateInitialState
+  clearCart,
+  //   calculateInitialState
 } from "../../features/Cart/cartSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -40,7 +40,7 @@ const Cart = () => {
 
   return (
     <>
-     <ResponsiveAppBar /> <br/>
+      {/* <ResponsiveAppBar /> <br/> */}
       <div
         style={{
           display: "flex",
@@ -76,12 +76,12 @@ const Cart = () => {
                     <td>
                       <CiCircleMinus
                         style={{ marginRight: "10px", cursor: "pointer" }}
-                        onClick={() => handleDecreaseQuantity({id: item.id, price: item?.price})}
+                        onClick={() => handleDecreaseQuantity({ id: item.id, price: item?.price })}
                       />
                       {item.quantity}
                       <CiCirclePlus
                         style={{ marginLeft: "10px", cursor: "pointer" }}
-                        onClick={() => handleIncreaseQuantity({id: item.id, price: item?.price})}
+                        onClick={() => handleIncreaseQuantity({ id: item.id, price: item?.price })}
                       />
                     </td>
                     <td>${item.price}</td>
@@ -99,16 +99,10 @@ const Cart = () => {
                 borderRadius: "8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <h3
-                className="price-details-heading"
-                style={{ color: "#333", marginBottom: "10px" }}
-              >
+              <h3 className="price-details-heading" style={{ color: "#333", marginBottom: "10px" }}>
                 PRICE DETAILS
               </h3>
-              <div
-                className="price-details-content"
-                style={{fontSize: "16px", lineHeight: "1.6"}}
-              >
+              <div className="price-details-content" style={{ fontSize: "16px", lineHeight: "1.6" }}>
                 <p style={{ marginBottom: "8px" }}>
                   Price ({cart?.cartLength} items): ${cart?.price?.worth}
                 </p>
@@ -116,12 +110,25 @@ const Cart = () => {
                 <p style={{ marginBottom: "8px" }}>Delivery Charges: ${cart?.deliveryCharges}</p>
                 <p style={{ marginBottom: "8px" }}>Total Amount: ${cart?.totalAmount}</p>
               </div>
-            </div><br /> <br /><br />
-            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-            <Button style={{marginRight: '10px'}} onClick={() => {dispatch(clearCart()); navigate('/')}}>Clear</Button>
-            <Button><Link style={{textDecoration: 'none', color:"#fff"}} to="/check-out">CHECK OUT</Link></Button>
-          </div>
-           
+            </div>
+            <br /> <br />
+            <br />
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Button
+                style={{ marginRight: "10px" }}
+                onClick={() => {
+                  dispatch(clearCart());
+                  navigate("/");
+                }}
+              >
+                Clear
+              </Button>
+              <Button>
+                <Link style={{ textDecoration: "none", color: "#fff" }} to="/check-out">
+                  CHECK OUT
+                </Link>
+              </Button>
+            </div>
           </>
         ) : (
           <div>

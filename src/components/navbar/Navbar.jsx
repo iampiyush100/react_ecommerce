@@ -14,7 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useNavigate } from "react-router";
 import { ImCart } from "react-icons/im";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { saveUserOnLogin, removeUserOnLogout } from "../../features/Auth/authSlice";
 
@@ -26,6 +26,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 function ResponsiveAppBar({ signedIn }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
   const { cartLength } = useSelector((state) => state.cart);
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -50,7 +51,7 @@ function ResponsiveAppBar({ signedIn }) {
 
   const handleCloseUserMenu = (event) => {
     console.log(event);
-    setAnchorElUser(null);
+    setAnchorElUser((prev) => null);
   };
 
   const touchBtn = (setting) => {
@@ -61,10 +62,9 @@ function ResponsiveAppBar({ signedIn }) {
       navigate("/login");
     }
   };
-
   return (
     <AppBar position="static">
-      {signedIn && (
+      {signedIn && pathname !== "/404" && (
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -83,7 +83,9 @@ function ResponsiveAppBar({ signedIn }) {
                 textDecoration: "none",
               }}
             >
-              BuyMI
+              <Link to="/" style={{ textDecoration: "none", color: "#FFF" }}>
+                BuyMI
+              </Link>
             </Typography>
 
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -92,7 +94,7 @@ function ResponsiveAppBar({ signedIn }) {
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
-                onClick={handleOpenNavMenu}
+                onClick={(e) => handleOpenNavMenu(e)}
                 color="inherit"
               >
                 <MenuIcon />
