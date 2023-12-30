@@ -23,7 +23,7 @@ const AppRouter = () => {
           <Route element={<ProtectedRoute />}>
             <Route path="/" exact element={<Home />}></Route>
             <Route path="/products" exact element={<Products />}></Route>
-            <Route path="/products/:id" exact element={<ProductsByID />}></Route>
+            <Route path="/products/:id" exact element={<ProductsByID />}/>
             <Route path="/cart" exact element={<Cart />}></Route>
             <Route path="/check-out" exact element={<Checkout />}></Route>
           </Route>
@@ -33,7 +33,7 @@ const AppRouter = () => {
         </Routes>
       </Router>
     </>
-  );
-};
+  )
+}
 
 export default AppRouter;

@@ -8,12 +8,10 @@ import Typography from "@mui/joy/Typography";
 import { useEffect, useState } from "react";
 import { CiHeart } from "react-icons/ci";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { addProductsInCart } from "../../features/Cart/cartSlice";
 import Loader from "../loader/Loader";
+import { Link } from "react-router-dom";
 
 export default function Products() {
-  const dispatch = useDispatch();
 
   const [products, setProducts] = useState([]);
 
@@ -21,15 +19,11 @@ export default function Products() {
   const [isLoading, setIsLoading] = useState(false);
   const [skip, setSkip] = useState(0);
 
-  function addToCart(item = {}) {
-    dispatch(addProductsInCart(item));
-  }
-
   const apiCalling = async () => {
     setIsLoading(true);
     let config = {
       method: "get",
-      url: `https://dummyjson.com/products?limit=9&skip=${skip}`,
+      url: `https://dummyjson.com/products?limit=12&skip=${skip}`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -57,7 +51,7 @@ export default function Products() {
   async function handleInfiniteScrolling() {
     try {
       if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
-        setSkip((prev) => prev + 9);
+        setSkip((prev) => prev + 12);
         console.log("skip>>>>", skip);
       }
     } catch (error) {}
@@ -101,23 +95,15 @@ export default function Products() {
                 </Typography>
               </div>
               <Button
-                onClick={() => {
-                  addToCart({
-                    id: product?.id,
-                    stockQuantity: product?.stock,
-                    title: product?.title,
-                    price: product?.price,
-                    finalPrice: product?.price,
-                  });
-                }}
                 variant="solid"
                 size="md"
                 color="primary"
                 aria-label="Explore Bahamas Islands"
                 sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
               >
-                {/* <Link  to={`/products/${product.id}`}> Add to cart</Link> */}
-                Add to cart
+                <Link to={`/products/${product.id}`} style={{ textDecoration: "none", color: "#FFF" }}>
+                  Explore
+                </Link>
               </Button>
             </CardContent>
           </Card>

@@ -17,14 +17,15 @@ import { ImCart } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { removeUserOnLogout } from "../../features/Auth/authSlice";
+import { useLocation } from "react-router-dom";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function Navbar({ signedIn }) {
-  console.log("signedIn>>>", signedIn);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
   const { cartLength } = useSelector((state) => state.cart);
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -67,11 +68,11 @@ function Navbar({ signedIn }) {
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+            <Link to="/" style={{ textDecoration: "none", color: "#FFF" }}>
             <Typography
               variant="h6"
               noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
+              component="span" // Use "span" instead of "a" for non-link behavior
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -84,7 +85,7 @@ function Navbar({ signedIn }) {
             >
               BuyMI
             </Typography>
-
+          </Link>
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
@@ -154,28 +155,31 @@ function Navbar({ signedIn }) {
                   <Avatar alt={userData?.username} src={userData.image} />
                 </IconButton>
               </Tooltip>
-              <Link to="/cart">
-                <IconButton sx={{ p: 0, color: "white" }}>
-                  <Box sx={{ display: "inline-block", marginRight: "15px" }}>Cart</Box> <ImCart />
-                  {cartLength > 0 ? (
-                    <div
-                      style={{
-                        border: "1px",
-                        marginLeft: "10px",
-                        padding: "7px",
-                        backgroundColor: "#f00",
-                        borderRadius: "50%",
-                        fontSize: "15px",
-                      }}
-                    >
-                      {" "}
-                      {cartLength}
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </IconButton>
-              </Link>
+              {pathname != "/cart" && (
+                <Link to="/cart">
+                  <IconButton sx={{ p: 0, color: "white" }}>
+                    <Box sx={{ display: "inline-block", marginRight: "15px" }}>Cart</Box> <ImCart />
+                    {cartLength > 0 ? (
+                      <div
+                        style={{
+                          border: "1px",
+                          marginLeft: "10px",
+                          padding: "7px",
+                          backgroundColor: "#f00",
+                          borderRadius: "50%",
+                          fontSize: "15px",
+                        }}
+                      >
+                        {" "}
+                        {cartLength}
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </IconButton>
+                </Link>
+              )}
+
               <Menu
                 sx={{ mt: "45px" }}
                 id="menu-appbar"
