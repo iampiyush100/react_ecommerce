@@ -1,25 +1,3 @@
-// import { useEffect, useState } from "react";
-// import ResponsiveAppBar from "../navbar/Navbar";
-
-// const Products = () => {
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     console.log(user);
-//   };
-
-//   const handleChange = (e) => {
-//     setUser((prevUser) => ({
-//       ...prevUser,
-//       [e.target.name]: e.target.value,
-//     }));
-//   };
-
-//   return <></>;
-// };
-
-// export default Products;
-
 import * as React from "react";
 import AspectRatio from "@mui/joy/AspectRatio";
 import Button from "@mui/joy/Button";
@@ -30,12 +8,14 @@ import Typography from "@mui/joy/Typography";
 import { useEffect, useState } from "react";
 import { CiHeart } from "react-icons/ci";
 import axios from "axios";
+import Loader from "../loader/Loader";
 import { Link } from "react-router-dom";
-// import ResponsiveAppBar from "../navbar/Navbar";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
+  const [totalProducts, setTotalProducts] = useState(1000);
 
+  const limit = 12;
   const [error, setError] = useState({ isError: false, message: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [skip, setSkip] = useState(0);
@@ -43,41 +23,51 @@ export default function Products() {
   const apiCalling = async () => {
     let config = {
       method: "get",
-      url: `https://dummyjson.com/products?limit=9&skip=${skip}`,
+      url: `https://dummyjson.com/products?limit=${limit}&skip=${skip}`,
       headers: {
         "Content-Type": "application/json",
       },
     };
     try {
       setIsLoading(true);
+      setError({
+        isError: false,
+        message: "",
+      });
       const response = await axios.request(config);
-      console.log({ response });
       setProducts((prev) => [...prev, ...response?.data?.products]);
+      setTotalProducts(response?.data?.total);
       setIsLoading(false);
     } catch (error) {
-      console.log("error>>>", error);
       setIsLoading(false);
       setError({
         isError: true,
-        message: error?.response?.data?.message || "something went wrong",
+        message: error?.response?.data?.message || "Something went wrong",
       });
     }
   };
 
+  useEffect(() => {
+    window.addEventListener("scroll", handleInfiniteScrolling);
+    if (skip + limit <= totalProducts + limit) {
+      apiCalling();
+    }
+    return () => window.removeEventListener("scroll", handleInfiniteScrolling);
+  }, [skip]);
+
   async function handleInfiniteScrolling() {
     try {
       if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
-        setSkip((prev) => prev + 9);
+        setSkip((prev) => prev + limit);
         console.log("skip>>>>", skip);
       }
-    } catch (error) {}
+    } catch (error) {
+      setError({
+        isError: true,
+        message: error?.message || "something went wrong",
+      });
+    }
   }
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleInfiniteScrolling);
-    apiCalling();
-    return () => window.removeEventListener("scroll", handleInfiniteScrolling);
-  }, [skip]);
 
   return (
     <div
@@ -91,7 +81,6 @@ export default function Products() {
     >
       {products.map((product) => (
         <Card key={product.id} sx={{ width: 320, marginBottom: "20px" }}>
-          {console.log("pd", product.id)}
           <div>
             <Typography level="title-lg">{product.title.toUpperCase()}</Typography>
             <Typography level="body-sm">{product.description}</Typography>
@@ -122,14 +111,15 @@ export default function Products() {
               aria-label="Explore Bahamas Islands"
               sx={{ ml: "auto", alignSelf: "center", fontWeight: 600 }}
             >
-              <Link style={{ textDecoration: "none", color: "#FFF" }} to={`/products/${product.id}`}>
+              <Link to={`/products/${product.id}`} style={{ textDecoration: "none", color: "#FFF" }}>
                 Explore
               </Link>
             </Button>
           </CardContent>
         </Card>
       ))}
-      {isLoading && <p style={{ color: "blue" }}>Loading.....</p>}
+      {isLoading && <div style={{ marginTop: "10px", color: "blue" }}>Loading....</div>}
+      {error.isError && <div style={{ color: "red", marginTop: "10px" }}>Error: {error.message}</div>}
     </div>
   );
 }

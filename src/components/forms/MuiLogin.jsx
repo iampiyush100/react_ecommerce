@@ -15,6 +15,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { saveUserOnLogin } from "../../features/Auth/authSlice";
 
 function Copyright(props) {
   return (
@@ -36,10 +38,10 @@ export default function SignIn() {
   const [error, setError] = useState({ isError: false, message: "" });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("user>>>>", user);
     if (user.email !== "" && user.password !== "") {
       setError({ isError: false, message: "" });
       setIsLoading(true);
@@ -57,19 +59,24 @@ export default function SignIn() {
         };
         try {
           const response = await axios.request(config);
-          localStorage.setItem(response?.data?.id, JSON.stringify(response?.data));
-          console.log("response.>>>>", response?.data);
+          localStorage.setItem("token", JSON.stringify(response?.data));
+          dispatch(saveUserOnLogin(response?.data));
           setIsLoading(false);
           navigate("/");
         } catch (error) {
-          console.log("error>>>>", error);
           setIsLoading(false);
-          setError({ isError: true, message: error?.response?.data?.message || "something went wrong" });
+          setError({
+            isError: true,
+            message: error?.response?.data?.message || "something went wrong",
+          });
         }
       };
       apiCalling();
     } else {
-      setError({ isError: true, message: "Please fill the form before submit" });
+      setError({
+        isError: true,
+        message: "Please fill the form before submit",
+      });
     }
   };
 
@@ -131,12 +138,12 @@ export default function SignIn() {
             {isLoading && <p style={{ color: "blue" }}>Loading.....</p>}
             <Grid container>
               <Grid item xs>
-                <RouterLink to="/reset-password" variant="body2">
+                <RouterLink to="/reset-password" variant="body2" style={{ textDecoration: "none", color: "Blue" }}>
                   Forgot password?
                 </RouterLink>
               </Grid>
               <Grid item>
-                <RouterLink to="/register" variant="body2">
+                <RouterLink to="/register" variant="body2" style={{ textDecoration: "none", color: "Blue" }}>
                   {"Don't have an account? Sign Up"}
                 </RouterLink>
               </Grid>
