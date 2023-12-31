@@ -116,7 +116,7 @@ const Cart = () => {
                 style={{ marginRight: "10px" }}
                 onClick={() => {
                   dispatch(clearCart());
-                  navigate("/");
+                  navigate(-1);
                 }}
               >
                 Clear
