@@ -13,7 +13,9 @@ import { Link } from "react-router-dom";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
+  const [totalProducts, setTotalProducts] = useState(1000);
 
+  const limit = 12;
   const [error, setError] = useState({ isError: false, message: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [skip, setSkip] = useState(0);
@@ -21,7 +23,7 @@ export default function Products() {
   const apiCalling = async () => {
     let config = {
       method: "get",
-      url: `https://dummyjson.com/products?limit=12&skip=${skip}`,
+      url: `https://dummyjson.com/products?limit=${limit}&skip=${skip}`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -34,26 +36,29 @@ export default function Products() {
       });
       const response = await axios.request(config);
       setProducts((prev) => [...prev, ...response?.data?.products]);
+      setTotalProducts(response?.data?.total);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       setError({
         isError: true,
-        message: error?.response?.data?.message || "something went wrong",
+        message: error?.response?.data?.message || "Something went wrong",
       });
     }
   };
 
   useEffect(() => {
     window.addEventListener("scroll", handleInfiniteScrolling);
-    apiCalling();
+    if (skip + limit <= totalProducts + limit) {
+      apiCalling();
+    }
     return () => window.removeEventListener("scroll", handleInfiniteScrolling);
   }, [skip]);
 
   async function handleInfiniteScrolling() {
     try {
       if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
-        setSkip((prev) => prev + 12);
+        setSkip((prev) => prev + limit);
         console.log("skip>>>>", skip);
       }
     } catch (error) {
@@ -113,7 +118,7 @@ export default function Products() {
           </CardContent>
         </Card>
       ))}
-      {isLoading && <div style={{ marginTop: "10px", color: 'blue'}}>Loading....</div> }
+      {isLoading && <div style={{ marginTop: "10px", color: "blue" }}>Loading....</div>}
       {error.isError && <div style={{ color: "red", marginTop: "10px" }}>Error: {error.message}</div>}
     </div>
   );
