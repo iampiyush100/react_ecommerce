@@ -29,7 +29,6 @@ function LoginForm() {
         };
         try {
           const response = await axios.request(config);
-          console.log({ response });
           setIsLoading(false);
         } catch (error) {
           setIsLoading(false);

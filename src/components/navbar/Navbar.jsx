@@ -34,7 +34,6 @@ function Navbar({ signedIn }) {
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("token"));
     setUserData(userData);
-    console.log("userData>>>", userData);
   }, []);
 
   const handleOpenNavMenu = (event) => {
@@ -49,12 +48,10 @@ function Navbar({ signedIn }) {
   };
 
   const handleCloseUserMenu = (event) => {
-    console.log(event);
     setAnchorElUser(null);
   };
 
   const touchBtn = (setting) => {
-    console.log("setting>>>>", setting);
     if (setting && setting === "Logout") {
       localStorage.clear();
       dispatch(removeUserOnLogout({}));

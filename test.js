@@ -17,4 +17,3 @@ const initialState = [
         isCompleted: false
     }
 ]
-console.log(initialState);
