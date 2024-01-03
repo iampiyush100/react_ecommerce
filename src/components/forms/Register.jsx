@@ -39,7 +39,6 @@ export default function RegistrationForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(user);
   };
 
   const handleChange = (e) => {

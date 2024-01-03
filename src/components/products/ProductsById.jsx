@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { ImCart } from "react-icons/im";
 import { SiBitcoincash } from "react-icons/si";
 import Loader from "../loader/Loader";
+import { Rate } from "antd";
 
 const SingleProduct = () => {
   const [error, setError] = useState({ isError: false, message: "" });
@@ -107,7 +108,8 @@ const SingleProduct = () => {
                 </ListGroupItem>
                 <ListGroupItem style={{ height: "100px" }}>
                   <h5>Rating</h5>
-                  <Rating rating={product.rating} />
+                  {/* <Rating rating={product.rating} /> */}
+                  <Rate disabled defaultValue={product.rating} />
                 </ListGroupItem>
                 <ListGroupItem style={{ height: "250px" }}>
                   <h5>{product.description}</h5>
@@ -148,10 +150,11 @@ const SingleProduct = () => {
                     onClick={() => {
                       addToCart({
                         id: product?.id,
+                        thumbnail: product?.thumbnail,
                         stockQuantity: product?.stock,
                         title: product?.title,
                         price: product?.price,
-                        immutablePrice: product?.price,
+                        manipulationPrice: product?.price,
                       });
                     }}
                   >
@@ -165,10 +168,11 @@ const SingleProduct = () => {
                     onClick={() => {
                       addToCart({
                         id: product?.id,
+                        thumbnail: product?.thumbnail,
                         stockQuantity: product?.stock,
                         title: product?.title,
                         price: product?.price,
-                        immutablePrice: product?.price,
+                        manipulationPrice: product?.price,
                       });
                     }}
                   >
