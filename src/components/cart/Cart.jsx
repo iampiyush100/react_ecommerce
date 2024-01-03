@@ -55,7 +55,7 @@ const Cart = () => {
         {cart.cartItems.length > 0 ? (
           <>
             <Container style={{ marginTop: "2%" }}>
-              <Row style={{ border: "1px solid", height: "40px" }}>
+              <Row style={{ border: "1px solid #D0D3D4", height: "40px", backgroundColor: '#F0F3F4' }}>
                 <Col style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>ITEM IMAGE</Col>
                 <Col style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>NAME</Col>
                 <Col style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>PRICE</Col>

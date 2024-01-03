@@ -159,15 +159,18 @@ function Navbar({ signedIn }) {
                     {cartLength > 0 ? (
                       <div
                         style={{
-                          border: "1px",
+                          width: '30px',
+                          height: '30px',
                           marginLeft: "10px",
-                          padding: "7px",
-                          backgroundColor: "#f00",
-                          borderRadius: "50%",
-                          fontSize: "15px",
+                          backgroundColor: '#ff0000', // Red background color (customize as needed)
+                          borderRadius: '50%', // Make it a circle
+                          color: '#fff', // Text color
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          fontSize: '14px', // Customize font size
                         }}
                       >
-                        {" "}
                         {cartLength}
                       </div>
                     ) : (
