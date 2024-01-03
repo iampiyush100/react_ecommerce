@@ -5,12 +5,10 @@ function ForgotPassword() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(email);
   };
 
   const handleChange = (e) => {
       setEmail(e.target.value)
-      console.log({email})
   };
   
   return (
