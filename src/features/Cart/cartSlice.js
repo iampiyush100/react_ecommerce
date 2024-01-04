@@ -74,9 +74,9 @@ export const cartSlice = createSlice({
             state.cartItems = []
             state.cartLength = 0;
             state.netProductsValueOfCart = 0
-            state.discount = 0,
-                state.deliveryCharges = 0,
-                state.netProductsValueIncludeOtherCharges = 0
+            state.discount = 0
+            state.deliveryCharges = 0
+            state.netProductsValueIncludeOtherCharges = 0
         },
     },
 })

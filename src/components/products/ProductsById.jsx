@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { Container, Row, Col, Image, ListGroup, ListGroupItem, Button } from "react-bootstrap";
 import Rating from "./Rating";
 import { addProductsInCart } from "../../features/Cart/cartSlice";
-import { useDispatch } from "react-redux";
 import { ImCart } from "react-icons/im";
 import { SiBitcoincash } from "react-icons/si";
 import Loader from "../loader/Loader";
-import { Rate } from "antd";
 
 const SingleProduct = () => {
   const [error, setError] = useState({ isError: false, message: "" });
@@ -17,6 +16,12 @@ const SingleProduct = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const initialStateCart = useSelector((state) => state.cart);
+
+  function checkProductInCart() {
+    return initialStateCart?.cartItems?.some((item) => item.id === parseInt(id));
+  }
 
   function addToCart(item = {}) {
     dispatch(addProductsInCart(item));
@@ -54,7 +59,7 @@ const SingleProduct = () => {
 
   return (
     <>
-    {/* commenting go back functionality */}
+      {/* commenting go back functionality */}
       {/* <Button
         style={{ marginTop: "10px", marginLeft: "10px", background: "#86B6F6" }}
         onClick={() => {
@@ -72,7 +77,7 @@ const SingleProduct = () => {
         </div>
       ) : (
         <Container style={{ width: "60%", marginTop: "7%", height: "500px" }}>
-          {error.isError && <div style={{ color: "red", textAlign: 'center' }}>Error: {error.message}</div>}
+          {error.isError && <div style={{ color: "red", textAlign: "center" }}>Error: {error.message}</div>}
           <Row>
             <Col md={6} style={{ height: "500px" }}>
               <ListGroup>
@@ -108,8 +113,8 @@ const SingleProduct = () => {
                 </ListGroupItem>
                 <ListGroupItem style={{ height: "100px" }}>
                   <h5>Rating</h5>
-                  {/* <Rating rating={product.rating} /> */}
-                  <Rate disabled defaultValue={product.rating} />
+                  <Rating rating={product?.rating} />
+                  {/* <Rate disabled defaultValue={product.rating} /> */}
                 </ListGroupItem>
                 <ListGroupItem style={{ height: "250px" }}>
                   <h5>{product.description}</h5>
@@ -145,21 +150,32 @@ const SingleProduct = () => {
                 </ListGroupItem>
 
                 <ListGroupItem style={{ height: "100px", textAlign: "center", display: "grid", placeItems: "center" }}>
-                  <Button
-                    className="btn-block"
-                    onClick={() => {
-                      addToCart({
-                        id: product?.id,
-                        thumbnail: product?.thumbnail,
-                        stockQuantity: product?.stock,
-                        title: product?.title,
-                        price: product?.price,
-                        manipulationPrice: product?.price,
-                      });
-                    }}
-                  >
-                    <ImCart /> &nbsp; ADD TO CART
-                  </Button>
+                  {!checkProductInCart() ? (
+                    <Button
+                      className="btn-block"
+                      onClick={() => {
+                        addToCart({
+                          id: product?.id,
+                          thumbnail: product?.thumbnail,
+                          stockQuantity: product?.stock,
+                          title: product?.title,
+                          price: product?.price,
+                          manipulationPrice: product?.price,
+                        });
+                      }}
+                    >
+                      <ImCart /> &nbsp; ADD TO CART
+                    </Button>
+                  ) : (
+                    <Button
+                      className="btn-block"
+                      onClick={() => {
+                        navigate("/cart");
+                      }}
+                    >
+                      <ImCart /> &nbsp; GO TO CART
+                    </Button>
+                  )}
                 </ListGroupItem>
 
                 <ListGroupItem style={{ textAlign: "center", height: "100px", display: "grid", placeItems: "center" }}>
