@@ -24,6 +24,8 @@ const Cart = () => {
   const [cart, setCart] = useState(initialStateCart);
   const [isVisible, setIsVisible] = useState(false)
   const [currentItem, setCurrentItem] = useState({})
+  const [makeBackGroundUntouchable, setMakeBackGroundUntouchable] = useState('')
+  
   function handleIncreaseQuantity(item) {
     if (cart.cartItems.length > 0) {
       dispatch(increaseProductsQuantity(item));
@@ -33,6 +35,7 @@ const Cart = () => {
   function handleRemoveItemFromCart(item) {
     if (cart.cartItems.length > 0) {
       setIsVisible(true)
+      setMakeBackGroundUntouchable('none')
       // dispatch(removeProductsInCart(item));
     }
   }
@@ -67,10 +70,10 @@ const Cart = () => {
           border: "1px soli",
         }}
       >
-        <Popup isVisible={isVisible} changeIsVisible={() => {setIsVisible(false)}} handleOnConfirm={() => {handleOnConfirm(currentItem); setIsVisible(false)}}/>
+        <Popup isVisible={isVisible} changeIsVisible={() => {setIsVisible(false); setMakeBackGroundUntouchable('')}} handleOnConfirm={() => {handleOnConfirm(currentItem); setIsVisible(false); setMakeBackGroundUntouchable('')}}/>
         {cart.cartItems.length > 0 ? (
           <>
-            <Container style={{ marginTop: "2%" }}>
+            <Container style={{ marginTop: "2%",  pointerEvents: makeBackGroundUntouchable,  }}>
               <Row style={{ border: "1px solid #D0D3D4", height: "40px", backgroundColor: '#F0F3F4' }}>
                 <Col style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>ITEM IMAGE</Col>
                 <Col style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>NAME</Col>
