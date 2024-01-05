@@ -3,11 +3,12 @@ import { CiCirclePlus, CiCircleMinus } from "react-icons/ci";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { Container, Row, Col, Image, ListGroup, ListGroupItem, Button } from "react-bootstrap";
-
+import Popup from '../common/Popup'
 import { Link } from "react-router-dom";
 import {
   increaseProductsQuantity,
   decreaseProductsQuantity,
+  removeProductsInCart,
   clearCart,
   //   calculateInitialState
 } from "../../features/Cart/cartSlice";
@@ -21,12 +22,26 @@ const Cart = () => {
   const navigate = useNavigate();
 
   const [cart, setCart] = useState(initialStateCart);
-
+  const [isVisible, setIsVisible] = useState(false)
+  const [currentItem, setCurrentItem] = useState({})
   function handleIncreaseQuantity(item) {
     if (cart.cartItems.length > 0) {
       dispatch(increaseProductsQuantity(item));
     }
   }
+
+  function handleRemoveItemFromCart(item) {
+    if (cart.cartItems.length > 0) {
+      setIsVisible(true)
+      // dispatch(removeProductsInCart(item));
+    }
+  }
+
+
+  function handleOnConfirm(item) {
+    dispatch(removeProductsInCart(item));
+  }
+
 
   function handleDecreaseQuantity(item) {
     if (cart.cartItems.length > 0) {
@@ -52,6 +67,7 @@ const Cart = () => {
           border: "1px soli",
         }}
       >
+        <Popup isVisible={isVisible} changeIsVisible={() => {setIsVisible(false)}} handleOnConfirm={() => {handleOnConfirm(currentItem); setIsVisible(false)}}/>
         {cart.cartItems.length > 0 ? (
           <>
             <Container style={{ marginTop: "2%" }}>
@@ -61,6 +77,8 @@ const Cart = () => {
                 <Col style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>PRICE</Col>
                 <Col style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>QUANTITY</Col>
                 <Col style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>TOTAL</Col>
+                <Col style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>ACTION</Col>
+
               </Row>
               {cart.cartItems.map((item, index) => (
                 <Row
@@ -100,6 +118,9 @@ const Cart = () => {
                   </Col>
                   <Col style={{ height: "100px", display: "flex", justifyContent: "center", alignItems: "center" }}>
                     ${item?.manipulationPrice}
+                  </Col>
+                  <Col style={{ height: "100px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <Button onClick={() => {handleRemoveItemFromCart(item); setCurrentItem(item)}}>REMOVE</Button>
                   </Col>
                 </Row>
               ))}

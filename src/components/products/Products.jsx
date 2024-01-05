@@ -8,11 +8,15 @@ import Typography from "@mui/joy/Typography";
 import { useEffect, useState } from "react";
 import { CiHeart } from "react-icons/ci";
 import axios from "axios";
-import Loader from "../loader/Loader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Container, Row, Col, Image, ListGroup, ListGroupItem } from "react-bootstrap";
+import { CiSearch } from "react-icons/ci";
+import Loader from '../loader/Loader'
 
 export default function Products() {
+  const navigate = useNavigate()
   const [products, setProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [totalProducts, setTotalProducts] = useState(1000);
 
   const limit = 12;
@@ -23,7 +27,7 @@ export default function Products() {
   const apiCalling = async () => {
     let config = {
       method: "get",
-      url: `https://dummyjson.com/products?limit=${limit}&skip=${skip}`,
+      url: `https://dummyjson.com/products/search?q=${searchQuery}&limit=${limit}&skip=${skip}`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -47,13 +51,19 @@ export default function Products() {
     }
   };
 
+  const handleSearch = async (event) => {
+    console.log("event?.target?.value????", event?.target?.value);
+    setSearchQuery(event?.target?.value);
+    setProducts([]);
+  };
+
   useEffect(() => {
     window.addEventListener("scroll", handleInfiniteScrolling);
     if (skip + limit <= totalProducts + limit) {
       apiCalling();
     }
     return () => window.removeEventListener("scroll", handleInfiniteScrolling);
-  }, [skip]);
+  }, [skip, searchQuery]);
 
   async function handleInfiniteScrolling() {
     try {
@@ -72,15 +82,39 @@ export default function Products() {
   return (
     <div
       style={{
-        margin: "2% 10%",
+        margin: "1% 10%",
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
         justifyContent: "space-around",
       }}
     >
-      {products.map((product) => (
-        <Card key={product.id} sx={{ width: 320, marginBottom: "20px" }}>
+      <Container style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <Row style={{ width: "30%", border: '1px solid #176B87', }}>
+          <Col md={10}>
+            <input
+              style={{
+                width: "100%", 
+                border: 'none',
+                outline: "none",
+              }}
+              type="text"
+              placeholder="Search Products..."
+              name="searchQuery"
+              value={searchQuery}
+              onChange={handleSearch}
+            />
+          </Col>
+          <Col md={2}>
+            <CiSearch />
+          </Col>
+        </Row>
+      </Container>
+      <br />
+      <br />
+      <br />
+      {products.map((product, index) => (
+        <Card key={product.id} sx={{ width: 320, marginBottom: "20px" }} onClick={() => navigate(`/products/${product.id}`)}>
           <div>
             <Typography level="title-lg">{product.title.toUpperCase()}</Typography>
             <Typography level="body-sm">{product.description}</Typography>
@@ -117,8 +151,9 @@ export default function Products() {
             </Button>
           </CardContent>
         </Card>
-      ))}
-      {isLoading && <div style={{ marginTop: "10px", color: "blue" }}>Loading....</div>}
+      ))} 
+      {/* {isLoading && <div style={{ marginTop: "10px", color: "blue" }}><Loader/></div>} */}
+      {isLoading && <div style={{ marginTop: "10px", color: "blue" }}>Loading.....</div>}
       {error.isError && <div style={{ color: "red", marginTop: "10px" }}>Error: {error.message}</div>}
     </div>
   );

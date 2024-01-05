@@ -46,9 +46,15 @@ export const cartSlice = createSlice({
         updateProductsInCart: (state, action) => {
 
         },
-        deleteProductsInCart: (state, action) => {
-            state = state.filter(item => item.id != action.payload)
-            return state
+        removeProductsInCart: (state, action) => {
+            const { id } = action.payload;
+            const item = state.cartItems.find((item) => item.id === id);
+            if (item && (Object.keys(item)).length > 0) {
+                state.netProductsValueOfCart -= item?.manipulationPrice
+                state.netProductsValueIncludeOtherCharges -= item?.manipulationPrice
+                state.cartItems = state.cartItems.filter(product => product?.id !== item.id)
+                state.cartLength -= 1;
+            }
         },
         increaseProductsQuantity: (state, action) => {
             const { id, price } = action.payload;
@@ -86,7 +92,7 @@ export const {
     addProductsInCart,
     getProductsInCarts,
     updateProductsInCart,
-    deleteProductsInCart,
+    removeProductsInCart,
     increaseProductsQuantity,
     decreaseProductsQuantity,
     calculateInitialState,
